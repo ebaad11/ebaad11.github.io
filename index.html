@@ -1,0 +1,680 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Binary Search</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="de66b980-439e-449a-8660-bf6db1278fdb" class="page sans"><header><h1 class="page-title">Binary Search</h1></header><div class="page-body"><h3 id="8449c065-e96d-4178-8779-657f1fa61caf" class="">Still under construction 🚧 :) </h3><p id="cbca0398-6d07-4a87-96c1-4c09793a8e99" class="">
+</p><p id="b6b13fb8-a013-4ddf-889c-16db1400db49" class="">⭐  Highly recomended</p><p id="956dfa03-c228-4231-81e1-dbb668fa52d7" class="">
+</p><ol type="1" id="0386caae-f912-44ff-bef3-bd3739ddc704" class="numbered-list" start="1"><li><a href="https://www.notion.so/Binary-Search-Vanilla-8f6ebbea239d45d9a2b42f515f1dbcff">Binary Search (Vanilla)</a> ⭐<ol type="a" id="cb8d0e60-fe67-4c4e-a1e0-4dbad3b067e9" class="numbered-list" start="1"><li><a href="https://www.notion.so/Real-life-Binary-Search-36c676e175884e0eb0d45400f96204ef">Real life applications</a></li></ol></li></ol><ol type="1" id="ed24a3f1-9758-4638-abb3-34fac6fd8116" class="numbered-list" start="2"><li><a href="https://www.notion.so/Find-the-First-True-in-a-Sorted-Boolean-Array-daeb0637927b454f8349753db2f0805e">Find the First True in a </a><a href="https://www.notion.so/Find-the-First-True-in-a-Sorted-Boolean-Array-daeb0637927b454f8349753db2f0805e"><mark class="highlight-purple">Sorted Boolean Array</mark></a><mark class="highlight-purple"> </mark>⭐<ol type="a" id="6477c2c6-21ac-4995-9184-19ac6b0f406a" class="numbered-list" start="1"><li><a href="https://www.notion.so/First-Bad-Version-bd5d182917b643b0b898b72e921284f6"><strong>First Bad Version</strong></a><strong> (Practice)</strong></li></ol><ol type="a" id="45463980-6b05-4ac0-9fc5-d9df70babbff" class="numbered-list" start="2"><li><a href="https://www.notion.so/Find-the-First-True-in-a-Sorted-Boolean-Array-Optional-Alternate-Approch-0665a4bd99734ba7bec37fb0bcf17612"><strong><strong>Find the First True in a Sorted Boolean Array (Optional Alternate Approch)</strong></strong></a></li></ol></li></ol><ol type="1" id="8078688d-d8c4-403a-8fbd-969e6f0779da" class="numbered-list" start="3"><li><a href="https://www.notion.so/Binary-search-Vanilla-to-Chocolate-9a2eef5ec7824a129d516f2feec6731b">Binary search Vanilla to Chocolate</a><ol type="a" id="721bd3ec-dc1c-4fb4-8736-509c4e4f0c0d" class="numbered-list" start="1"><li><a href="https://www.notion.so/Thought-Experiement-Does-an-array-need-to-be-sorted-to-run-Binary-Search-64ba5466538540ecba31ba5b58e0bb2e">Thought Experiement, Does an array need to be sorted to run Binary Search?</a> ⭐</li></ol></li></ol><ol type="1" id="a2165902-d465-4b7e-a9a2-4e4d6ad4fe7f" class="numbered-list" start="4"><li><a href="https://www.notion.so/First-and-last-occurrence-of-an-Element-in-a-Sorted-Array-4abcd696024349879f641cb3d71d2b8c">1st and last occurrence of an Element in a </a><a href="https://www.notion.so/First-and-last-occurrence-of-an-Element-in-a-Sorted-Array-4abcd696024349879f641cb3d71d2b8c"><mark class="highlight-purple">Sorted Array </mark></a><mark class="highlight-purple"> </mark>⭐<ol type="a" id="b8c6e1c0-7344-4f9e-bb7e-c5aba6d86fb9" class="numbered-list" start="1"><li><a href="https://www.notion.so/Find-the-number-of-occurrences-of-an-element-in-a-sorted-array-712efdce989445a9945042389baf0df4">Find the number of occurrences of an element in a sorted array</a></li></ol></li></ol><ol type="1" id="bab63927-9d39-4357-80bc-92940797be61" class="numbered-list" start="5"><li>Ceiling and Floor, the story of two pointers<ol type="a" id="60a5cc41-008a-453d-aac1-a689f12ae810" class="numbered-list" start="1"><li><a href="https://www.notion.so/Ceiling-Upper-Bound-2864b3150b934cbc99841182ef58f006">Ceiling—Smallest element after the Target</a><ol type="i" id="8bfc7e50-2bb8-4efd-a091-f2f744bdee8b" class="numbered-list" start="1"><li><a href="https://www.notion.so/Find-Smallest-Letter-Greater-Than-Target-2dd37bdad64341799abef821b7d4260d"><strong>Find Smallest Letter Greater Than Target</strong></a></li></ol><ol type="i" id="87709e0c-e5c2-4262-8a1c-3de31b07936d" class="numbered-list" start="2"><li><a href="https://www.notion.so/Search-Insert-Position-Sorted-Array-Upper-Bound-7afbfb2562994ce5913ce3f461bd79f0"><strong>Search Insert Position</strong></a><a href="https://www.notion.so/Search-Insert-Position-Sorted-Array-Upper-Bound-7afbfb2562994ce5913ce3f461bd79f0"><mark class="highlight-purple"><strong>(Sorted Array)</strong></mark></a><mark class="highlight-purple"><strong> </strong></mark>Upper Bound</li></ol></li></ol><ol type="a" id="e9e8a270-7a6c-4bf5-868a-035972b4b9ed" class="numbered-list" start="2"><li><a href="https://www.notion.so/Floor-Lower-Bound-10cb23f6baac4fcabe5247d84549659b">Floor—largest element Before the Target.</a><ol type="i" id="42f48782-e013-4469-b0d9-aca95ed5c8f0" class="numbered-list" start="1"><li><a href="https://www.notion.so/SQRT-X-Square-Root-Estimation-cc2bf670c61b4b1da9d14a6fb165e8d8">SQRT(X)—</a><a href="https://www.notion.so/SQRT-X-Square-Root-Estimation-cc2bf670c61b4b1da9d14a6fb165e8d8"><strong><strong>Square Root Estimation</strong></strong></a><strong><strong>—(optimizing around a function) </strong></strong>⭐</li></ol><ol type="i" id="280d301b-fbeb-4bf7-9dac-f87f8d0e8136" class="numbered-list" start="2"><li><a href="https://www.notion.so/Search-Insert-Position-Sorted-Array-lower-Bound-ca91f2d67ca94db6b499d8d10bcdf30c">Search Insert Position(Sorted Array) </a>Lower Bound</li></ol><ol type="i" id="95e42f30-ad44-4b37-a9e9-e1eb6c3b1ac5" class="numbered-list" start="3"><li><a href="https://leetcode.com/problems/time-based-key-value-store/">Time Based Key-Value Store</a> (Practice)</li></ol></li></ol><ol type="a" id="e7292e5f-f8a2-4a64-acb7-a21addeed226" class="numbered-list" start="3"><li><a href="https://www.notion.so/Find-the-minimum-difference-element-in-a-sorted-array-7cbccb51820642ad9b7f138fcd5fee28"><strong><strong>Minimum Difference between an Element and a value in a </strong></strong></a><a href="https://www.notion.so/Find-the-minimum-difference-element-in-a-sorted-array-7cbccb51820642ad9b7f138fcd5fee28"><mark class="highlight-purple">Sorted Array </mark></a></li></ol></li></ol><ol type="1" id="7b1e9260-b9da-4966-bfb2-dc722264f48c" class="numbered-list" start="6"><li> F<strong>easibility and Optimality</strong><ol type="a" id="ae061bc0-ee97-4d04-9c22-c4a86bafea62" class="numbered-list" start="1"><li><a href="https://www.notion.so/KOKO-eating-Bananas-05e9482e2ce44ed9bc5ecee757ca85b5">KOKO eating Bananas</a><mark class="highlight-yellow"><a href="https://www.notion.so/KOKO-eating-Bananas-05e9482e2ce44ed9bc5ecee757ca85b5"> (Medium)</a></mark><a href="https://www.notion.so/KOKO-eating-Bananas-05e9482e2ce44ed9bc5ecee757ca85b5"> + Similar Questions</a> ⭐</li></ol><ol type="a" id="db467eae-c330-43c5-9062-ea967f4be72c" class="numbered-list" start="2"><li><a href="https://www.notion.so/Allocate-minimum-number-of-pages-Hard-8d2ef4b606d445e48ad2bfcfa53686ed"><strong>Allocate minimum number of pages </strong></a><a href="https://www.notion.so/Allocate-minimum-number-of-pages-Hard-8d2ef4b606d445e48ad2bfcfa53686ed"><mark class="highlight-red"><strong>(Hard) + </strong></mark></a><a href="https://www.notion.so/Allocate-minimum-number-of-pages-Hard-8d2ef4b606d445e48ad2bfcfa53686ed">similar Question</a></li></ol></li></ol><ol type="1" id="c0c4734f-e222-4869-9e79-4e94c0d1a4ca" class="numbered-list" start="7"><li>Rotated <mark class="highlight-purple">Sorted Array</mark><ol type="a" id="47e5c036-3d4b-47d0-857e-d6b0dad95bee" class="numbered-list" start="1"><li><a href="https://www.notion.so/Check-if-an-array-is-sorted-and-rotated-578ec26c58244d1b9ee8d57ec2f16de9"><mark class="highlight-blue">Check</mark></a><a href="https://www.notion.so/Check-if-an-array-is-sorted-and-rotated-578ec26c58244d1b9ee8d57ec2f16de9"> if an array is sorted and rotated</a></li></ol><ol type="a" id="7a9891ba-e907-4d2a-ad2f-40bad2806a32" class="numbered-list" start="2"><li><a href="https://www.notion.so/The-Minimum-in-a-Rotated-Sorted-Array-ed3558b190d04e4db151a498cda60f83">Minimum in a Rotated </a><a href="https://www.notion.so/The-Minimum-in-a-Rotated-Sorted-Array-ed3558b190d04e4db151a498cda60f83"><mark class="highlight-purple">Sorted Array</mark></a><mark class="highlight-purple"> </mark>⭐</li></ol><ol type="a" id="d0fa9d27-4327-4a71-bcbb-ec912e110096" class="numbered-list" start="3"><li><a href="https://www.notion.so/Search-in-Rotated-Sorted-Array-1989a6434e764a7081007d0e04ef8ede"><strong>Search in Rotated Sorted Array</strong></a></li></ol><ol type="a" id="7d35c9ae-45d0-4aab-b877-7311e280c2e5" class="numbered-list" start="4"><li><a href="https://www.notion.so/Minimum-in-Rotated-Sorted-Array-with-Duplicates-8514cfa13f964693892427725395521c">Minimum in Rotated </a><a href="https://www.notion.so/Minimum-in-Rotated-Sorted-Array-with-Duplicates-8514cfa13f964693892427725395521c"><mark class="highlight-purple">Sorted Array</mark></a><a href="https://www.notion.so/Minimum-in-Rotated-Sorted-Array-with-Duplicates-8514cfa13f964693892427725395521c"> with Duplicates </a></li></ol><ol type="a" id="cef8f843-8c54-4fe8-b3b3-9fa9112151b2" class="numbered-list" start="5"><li><a href="https://www.notion.so/Search-in-Rotated-Sorted-Array-with-Duplicates-e3753bf8526a4641a7f4bd1fe2d2e03c">Search in Rotated </a><a href="https://www.notion.so/Search-in-Rotated-Sorted-Array-with-Duplicates-e3753bf8526a4641a7f4bd1fe2d2e03c"><mark class="highlight-purple">Sorted Array</mark></a><a href="https://www.notion.so/Search-in-Rotated-Sorted-Array-with-Duplicates-e3753bf8526a4641a7f4bd1fe2d2e03c"> with Duplicates</a></li></ol></li></ol><ol type="1" id="4bef9a30-56d2-4c62-9cef-ff0da2750532" class="numbered-list" start="8"><li>Searching in a Bitonic Sequence (first strictly increasing then after a point strictly decreasing)<ol type="a" id="d09f158b-6a6e-4436-841a-3f824653926f" class="numbered-list" start="1"><li><a href="https://www.notion.so/Find-peak-in-a-mountain-array-b52646a8709f41b8a0b4ad3e850f155a">Find peak in a mountain array.</a> ⭐</li></ol><ol type="a" id="76d4e2b3-293f-4850-988d-547e3390eba9" class="numbered-list" start="2"><li><a href="https://leetcode.com/problems/find-in-mountain-array/description/">Find an element in a mountain array</a>. (Practice)</li></ol><ol type="a" id="a1ec8416-7c25-4a4c-9a8d-980019d7e22b" class="numbered-list" start="3"><li><a href="https://www.notion.so/Find-Peak-Element-in-a-mountain-range-array-990b5ece42514b3a9ae8e94dede7a975">Find Peak Element in a mountain range array</a></li></ol><ol type="a" id="8b320ac7-90b4-446e-9b11-ba73328954d4" class="numbered-list" start="4"><li><a href="https://leetcode.com/problems/find-a-peak-element-ii/description/">Find the peak in mountain range</a> II (Practice)</li></ol></li></ol><ol type="1" id="3cdc2731-b448-4b78-af44-7c629c5a8743" class="numbered-list" start="9"><li>2D matrix<ol type="a" id="aa016d87-1b06-4151-8a5e-f7630de845c7" class="numbered-list" start="1"><li><a href="https://www.notion.so/Search-a-2D-Matrix-mapping-function-8deda33c2e514971acffc8b9bc120c77">Search a 2D Matrix (mapping function)</a></li></ol><ol type="a" id="d204e4b0-12e0-4800-874b-e96d9bc724d2" class="numbered-list" start="2"><li><a href="https://www.notion.so/Search-a-2D-Matrix-II-1e83ebb770b64b67a0867c3c0c3a7d22">Search a 2D Matrix II </a></li></ol></li></ol><p id="c2e3c645-82a9-4505-814d-e581698888f4" class="">
+</p><p id="2e14c7d4-9816-41b7-a5b2-3c67aaf54122" class="">
+</p><p id="dedf6808-3f15-4d75-a786-8fd31786b5e9" class="">Misc—Possible Additions<div class="indented"><ol type="1" id="7af2c900-6a30-400c-9f2f-6376d650a523" class="numbered-list" start="1"><li><a href="https://leetcode.com/problems/median-of-two-sorted-arrays/">Median of Two </a><a href="https://leetcode.com/problems/median-of-two-sorted-arrays/"><mark class="highlight-purple">Sorted Arrays</mark></a>(Practice)</li></ol><ol type="1" id="a9838937-1f33-4c03-b4d6-94f6c15eefe9" class="numbered-list" start="2"><li><a href="https://www.techiedelight.com/unbounded-binary-search/">Infinite </a><a href="https://www.techiedelight.com/unbounded-binary-search/"><mark class="highlight-purple">sorted Array</mark></a>(Practice)</li></ol><ol type="1" id="b231a756-2873-4d3b-9d8b-3875d2263c28" class="numbered-list" start="3"><li><a href="https://www.notion.so/Two-sum-II-50df6f1e31ab41b7a1c5948cf8a352cc">Two sum II</a>(Practice)</li></ol><ol type="1" id="dc1f25d0-1481-4918-8409-7e0fcc416fbe" class="numbered-list" start="4"><li>Binary search on BSTs(Practice)</li></ol></div></p><p id="a939df29-9013-4b2f-ad22-d01ccac41608" class="">
+</p><p id="99d9517a-caa9-4260-ac03-681c1d9351e8" class="">
+</p><h3 id="6dbae84b-c401-43f4-a2a8-c617461ab02d" class=""><mark class="highlight-purple">Shorter route</mark></h3><p id="56dea9a5-8bd9-47f2-bbf3-347cb49f338f" class="">
+</p><ol type="1" id="78926bc3-6103-4883-9542-8d068f123712" class="numbered-list" start="1"><li><a href="https://www.notion.so/Binary-Search-Vanilla-8f6ebbea239d45d9a2b42f515f1dbcff">Binary Search (Vanilla)</a> ⭐</li></ol><ol type="1" id="0a4ed401-0f9d-4552-a148-42d56438ed12" class="numbered-list" start="2"><li><a href="https://www.notion.so/Find-the-First-True-in-a-Sorted-Boolean-Array-daeb0637927b454f8349753db2f0805e">Find the First True in a </a><a href="https://www.notion.so/Find-the-First-True-in-a-Sorted-Boolean-Array-daeb0637927b454f8349753db2f0805e"><mark class="highlight-purple">Sorted Boolean Array</mark></a><mark class="highlight-purple"> </mark>⭐</li></ol><ol type="1" id="16e03e61-d7eb-4f46-abaa-b64f91957ad0" class="numbered-list" start="3"><li><a href="https://www.notion.so/Binary-search-Vanilla-to-Chocolate-9a2eef5ec7824a129d516f2feec6731b">Binary search Vanilla to Chocolate</a><ol type="a" id="3f63fcb8-5c6f-4ffb-af13-f1ff8f25f785" class="numbered-list" start="1"><li><a href="https://www.notion.so/Thought-Experiement-Does-an-array-need-to-be-sorted-to-run-Binary-Search-64ba5466538540ecba31ba5b58e0bb2e">Thought Experiement, Does an array need to be sorted to run Binary Search?</a> ⭐</li></ol></li></ol><ol type="1" id="98e17d1a-8b5c-48ea-988e-0d1651db0f3d" class="numbered-list" start="4"><li><a href="https://www.notion.so/First-and-last-occurrence-of-an-Element-in-a-Sorted-Array-4abcd696024349879f641cb3d71d2b8c">1st and last occurrence of an Element in a </a><a href="https://www.notion.so/First-and-last-occurrence-of-an-Element-in-a-Sorted-Array-4abcd696024349879f641cb3d71d2b8c"><mark class="highlight-purple">Sorted Array </mark></a><mark class="highlight-purple"> </mark>⭐<ol type="a" id="1e690386-a1ff-4c0b-b671-bc7ad0c71acd" class="numbered-list" start="1"><li><a href="https://www.notion.so/Find-the-number-of-occurrences-of-an-element-in-a-sorted-array-712efdce989445a9945042389baf0df4">Find the number of occurrences of an element in a sorted array</a></li></ol></li></ol><ol type="1" id="27df157a-46b8-4658-bd0f-dee28f681ca4" class="numbered-list" start="5"><li>Ceiling and Floor<ol type="a" id="1a0d3012-e599-48ef-83e8-de38ba921835" class="numbered-list" start="1"><li><a href="https://www.notion.so/Ceiling-Upper-Bound-2864b3150b934cbc99841182ef58f006">Ceiling—Smallest element after the Target</a><ol type="i" id="2a713bea-f8f2-4eb1-bd51-90428b0f3a91" class="numbered-list" start="1"><li><a href="https://www.notion.so/Find-Smallest-Letter-Greater-Than-Target-2dd37bdad64341799abef821b7d4260d"><strong>Find Smallest Letter Greater Than Target</strong></a></li></ol></li></ol><ol type="a" id="9821908c-beff-49dd-b2dc-2d7fedc9ce54" class="numbered-list" start="2"><li><a href="https://www.notion.so/Floor-Lower-Bound-10cb23f6baac4fcabe5247d84549659b">Floor—largest element Before the Target.</a><ol type="i" id="31490279-1e72-404a-8e22-ea00cac8732a" class="numbered-list" start="1"><li><a href="https://www.notion.so/SQRT-X-Square-Root-Estimation-cc2bf670c61b4b1da9d14a6fb165e8d8">SQRT(X)—</a><a href="https://www.notion.so/SQRT-X-Square-Root-Estimation-cc2bf670c61b4b1da9d14a6fb165e8d8"><strong><strong>Square Root Estimation</strong></strong></a><strong><strong>—(optimizing around a function) </strong></strong></li></ol></li></ol></li></ol><ol type="1" id="65e58846-9395-481f-aa28-7cd3522f3424" class="numbered-list" start="6"><li> F<strong>easibility and Optimality</strong><ol type="a" id="f230366c-5046-437b-929b-2b51e1953b6a" class="numbered-list" start="1"><li><a href="https://www.notion.so/KOKO-eating-Bananas-05e9482e2ce44ed9bc5ecee757ca85b5">KOKO eating Bananas</a><mark class="highlight-yellow"><a href="https://www.notion.so/KOKO-eating-Bananas-05e9482e2ce44ed9bc5ecee757ca85b5"> (Medium)</a></mark><a href="https://www.notion.so/KOKO-eating-Bananas-05e9482e2ce44ed9bc5ecee757ca85b5"> + Similar Questions</a> ⭐</li></ol></li></ol><ol type="1" id="0209f1b7-f3e4-49a0-8911-0b98e8972550" class="numbered-list" start="7"><li>Rotated <mark class="highlight-purple">Sorted Array</mark><ol type="a" id="23c7c39c-96f1-433c-b49a-8590e29df7b9" class="numbered-list" start="1"><li><a href="https://www.notion.so/Check-if-an-array-is-sorted-and-rotated-578ec26c58244d1b9ee8d57ec2f16de9"><mark class="highlight-blue">Check</mark></a><a href="https://www.notion.so/Check-if-an-array-is-sorted-and-rotated-578ec26c58244d1b9ee8d57ec2f16de9"> if an array is sorted and rotated</a></li></ol><ol type="a" id="f5559ff3-4b98-454a-9342-97a2047e77ce" class="numbered-list" start="2"><li><a href="https://www.notion.so/The-Minimum-in-a-Rotated-Sorted-Array-ed3558b190d04e4db151a498cda60f83">Minimum in a Rotated </a><a href="https://www.notion.so/The-Minimum-in-a-Rotated-Sorted-Array-ed3558b190d04e4db151a498cda60f83"><mark class="highlight-purple">Sorted Array</mark></a><mark class="highlight-purple"> </mark>⭐</li></ol><ol type="a" id="95c1aa24-a7d1-4012-ba72-666466b8920d" class="numbered-list" start="3"><li><a href="https://www.notion.so/Search-in-Rotated-Sorted-Array-1989a6434e764a7081007d0e04ef8ede"><strong>Search in Rotated Sorted Array</strong></a></li></ol></li></ol><ol type="1" id="0b7f8e96-86b1-4db1-b0a3-4d447f5a91c6" class="numbered-list" start="8"><li>Searching in a Bitonic Sequence (first strictly increasing then after a point strictly decreasing)<ol type="a" id="988d5400-6967-4d2f-9949-7a9c7ddb1bcb" class="numbered-list" start="1"><li><a href="https://www.notion.so/Find-peak-in-a-mountain-array-b52646a8709f41b8a0b4ad3e850f155a">Find peak in a mountain array.</a> ⭐</li></ol></li></ol><ol type="1" id="11eba0c9-7b39-4e24-9b93-84a1481e73aa" class="numbered-list" start="9"><li>2D matrix<ol type="a" id="c168c61c-87af-419e-a2c4-ca1660820db6" class="numbered-list" start="1"><li><a href="https://www.notion.so/Search-a-2D-Matrix-II-1e83ebb770b64b67a0867c3c0c3a7d22">Search a 2D Matrix II </a></li></ol><p id="b83f69c5-34bd-4362-9875-fc61e426700b" class="">
+</p></li></ol><h3 id="b365a2e9-1f31-4cbe-8df3-50502158d898" class="">Scripts(imported only due to a dependency issue)</h3><figure id="f6e45834-e19b-4b67-af14-ef0802e3adf8" class="link-to-page"><a href="https://www.notion.so/Binary-Search-f6e45834e19b4b67af14ef0802e3adf8">Binary Search</a></figure><figure id="8f6ebbea-239d-45d9-a2b4-2f515f1dbcff" class="link-to-page"><a href="https://www.notion.so/Binary-Search-Vanilla-8f6ebbea239d45d9a2b42f515f1dbcff"><span class="icon">🍦</span>Binary Search(Vanilla) </a></figure><figure id="36c676e1-7588-4e0e-b0d4-5400f96204ef" class="link-to-page"><a href="https://www.notion.so/Real-life-Binary-Search-36c676e175884e0eb0d45400f96204ef"><span class="icon">🌎</span>Real life Binary Search</a></figure><figure id="daeb0637-927b-454f-8349-753db2f0805e" class="link-to-page"><a href="https://www.notion.so/Find-the-First-True-in-a-Sorted-Boolean-Array-daeb0637927b454f8349753db2f0805e"><span class="icon">🔑</span>Find the First True in a Sorted Boolean Array </a></figure><figure id="9a2eef5e-c782-4a12-9d51-6f2feec6731b" class="link-to-page"><a href="https://www.notion.so/Binary-search-Vanilla-to-Chocolate-9a2eef5ec7824a129d516f2feec6731b"><span class="icon">🍫</span>Binary search Vanilla to Chocolate</a></figure><figure id="4abcd696-0243-4987-9f64-1cb3d71d2b8c" class="link-to-page"><a href="https://www.notion.so/First-and-last-occurrence-of-an-Element-in-a-Sorted-Array-4abcd696024349879f641cb3d71d2b8c"><span class="icon">🕧</span>First and last occurrence of an Element in a Sorted Array </a></figure><figure id="712efdce-9894-45a9-9450-42389baf0df4" class="link-to-page"><a href="https://www.notion.so/Find-the-number-of-occurrences-of-an-element-in-a-sorted-array-712efdce989445a9945042389baf0df4"><span class="icon">📏</span>Find the number of occurrences of an element in a sorted array</a></figure><figure id="2864b315-0b93-4cbc-9984-1182ef58f006" class="link-to-page"><a href="https://www.notion.so/Ceiling-Upper-Bound-2864b3150b934cbc99841182ef58f006"><span class="icon">🛖</span>Ceiling(Upper Bound)</a></figure><figure id="10cb23f6-baac-4fca-be52-47d84549659b" class="link-to-page"><a href="https://www.notion.so/Floor-Lower-Bound-10cb23f6baac4fcabe5247d84549659b"><span class="icon">🎢</span>Floor (Lower Bound) </a></figure><figure id="2dd37bda-d643-4179-9abe-f821b7d4260d" class="link-to-page"><a href="https://www.notion.so/Find-Smallest-Letter-Greater-Than-Target-2dd37bdad64341799abef821b7d4260d"><span class="icon">🧾</span>Find Smallest Letter Greater Than Target</a></figure><figure id="cc2bf670-c61b-4b1d-a9d1-4a6fb165e8d8" class="link-to-page"><a href="https://www.notion.so/SQRT-X-Square-Root-Estimation-cc2bf670c61b4b1da9d14a6fb165e8d8"><span class="icon">⬜</span>SQRT(X)—Square Root Estimation</a></figure><figure id="7afbfb25-6299-4ce5-913c-e3f461bd79f0" class="link-to-page"><a href="https://www.notion.so/Search-Insert-Position-Sorted-Array-Upper-Bound-7afbfb2562994ce5913ce3f461bd79f0"><span class="icon">🎏</span>Search Insert Position(Sorted Array) Upper Bound</a></figure><figure id="bd5d1829-17b6-43b0-b898-b72e921284f6" class="link-to-page"><a href="https://www.notion.so/First-Bad-Version-bd5d182917b643b0b898b72e921284f6">First Bad Version</a></figure><figure id="7a466e8a-6a53-4c89-86f8-cf1440fae824" class="link-to-page"><a href="https://www.notion.so/Utsav-7a466e8a6a534c8986f8cf1440fae824">Utsav </a></figure><figure id="7cbccb51-8206-42ad-9b7f-138fcd5fee28" class="link-to-page"><a href="https://www.notion.so/Find-the-minimum-difference-element-in-a-sorted-array-7cbccb51820642ad9b7f138fcd5fee28"><span class="icon">🎉</span>Find the minimum difference element in a sorted array </a></figure><figure id="05e9482e-2ce4-4ed9-bc5e-cee757ca85b5" class="link-to-page"><a href="https://www.notion.so/KOKO-eating-Bananas-05e9482e2ce44ed9bc5ecee757ca85b5"><span class="icon">🐒</span>KOKO eating Bananas </a></figure><figure id="8d2ef4b6-06d4-45e4-8ad2-bfcfa53686ed" class="link-to-page"><a href="https://www.notion.so/Allocate-minimum-number-of-pages-Hard-8d2ef4b606d445e48ad2bfcfa53686ed"><span class="icon">🚌</span>Allocate minimum number of pages (Hard)</a></figure><figure id="578ec26c-5824-4d1b-9ee8-d57ec2f16de9" class="link-to-page"><a href="https://www.notion.so/Check-if-an-array-is-sorted-and-rotated-578ec26c58244d1b9ee8d57ec2f16de9"><span class="icon">🎞️</span>Check if an array is sorted and rotated</a></figure><figure id="2ac094ef-c712-48a4-929e-35f02213c8ff" class="link-to-page"><a href="https://www.notion.so/Monotonic-function-2ac094efc71248a4929e35f02213c8ff"><span class="icon">🧩</span>Monotonic function</a></figure><figure id="ed3558b1-90d0-4e4d-b151-a498cda60f83" class="link-to-page"><a href="https://www.notion.so/The-Minimum-in-a-Rotated-Sorted-Array-ed3558b190d04e4db151a498cda60f83"><span class="icon">📉</span>The Minimum in a Rotated Sorted Array</a></figure><figure id="1989a643-4e76-4a70-8100-7d0e04ef8ede" class="link-to-page"><a href="https://www.notion.so/Search-in-Rotated-Sorted-Array-1989a6434e764a7081007d0e04ef8ede"><span class="icon">🔎</span>Search in Rotated Sorted Array</a></figure><figure id="8514cfa1-3f96-4693-8924-27725395521c" class="link-to-page"><a href="https://www.notion.so/Minimum-in-Rotated-Sorted-Array-with-Duplicates-8514cfa13f964693892427725395521c"><img class="icon" src="https://www.notion.so/icons/copy_orange.svg"/>Minimum in Rotated Sorted Array with Duplicates </a></figure><figure id="e3753bf8-526a-4641-a7f4-bd1fe2d2e03c" class="link-to-page"><a href="https://www.notion.so/Search-in-Rotated-Sorted-Array-with-Duplicates-e3753bf8526a4641a7f4bd1fe2d2e03c"><img class="icon" src="https://www.notion.so/icons/search_red.svg"/>Search in Rotated Sorted Array with Duplicates</a></figure><figure id="b52646a8-709f-41b8-a0b4-ad3e850f155a" class="link-to-page"><a href="https://www.notion.so/Find-peak-in-a-mountain-array-b52646a8709f41b8a0b4ad3e850f155a"><span class="icon">⛰️</span>Find peak in a mountain array.</a></figure><figure id="990b5ece-4251-4b3a-9ae8-e94dede7a975" class="link-to-page"><a href="https://www.notion.so/Find-Peak-Element-in-a-mountain-range-array-990b5ece42514b3a9ae8e94dede7a975"><span class="icon">🚞</span>Find Peak Element in a mountain range array.</a></figure><figure id="8deda33c-2e51-4971-acff-c8b9bc120c77" class="link-to-page"><a href="https://www.notion.so/Search-a-2D-Matrix-mapping-function-8deda33c2e514971acffc8b9bc120c77"><img class="icon" src="https://www.notion.so/icons/grid_orange.svg"/>Search a 2D Matrix (mapping function)</a></figure><figure id="1e83ebb7-70b6-4b67-a086-7c3c0c3a7d22" class="link-to-page"><a href="https://www.notion.so/Search-a-2D-Matrix-II-1e83ebb770b64b67a0867c3c0c3a7d22"><img class="icon" src="https://www.notion.so/icons/grid_red.svg"/>Search a 2D Matrix II</a></figure><figure id="33a0ad14-2c7e-46a9-91f8-20208ade27b0" class="link-to-page"><a href="https://www.notion.so/Understanding-Time-Complexity-of-OLog-N-Math-Intuition-33a0ad142c7e46a991f820208ade27b0"><span class="icon">📐</span>Understanding Time Complexity of OLog(N): Math + Intuition</a></figure><figure id="18080a57-caca-4d7c-9676-c26745d73f15" class="link-to-page"><a href="https://www.notion.so/Binary-Search-to-a-kid-1-18080a57caca4d7c9676c26745d73f15">Binary Search to a kid (1)</a></figure><figure id="0665a4bd-9973-4ba7-bec3-7fb0bcf17612" class="link-to-page"><a href="https://www.notion.so/Find-the-First-True-in-a-Sorted-Boolean-Array-Optional-Alternate-Approch-0665a4bd99734ba7bec37fb0bcf17612">Find the First True in a Sorted Boolean Array (Optional Alternate Approch)</a></figure><figure id="64ba5466-5385-40ec-ba31-ba5b58e0bb2e" class="link-to-page"><a href="https://www.notion.so/Thought-Experiement-Does-an-array-need-to-be-sorted-to-run-Binary-Search-64ba5466538540ecba31ba5b58e0bb2e"><span class="icon">⁉️</span>Thought Experiement, Does an array need to be sorted to run Binary Search?</a></figure><figure id="ca91f2d6-7ca9-4db6-b499-d8d10bcdf30c" class="link-to-page"><a href="https://www.notion.so/Search-Insert-Position-Sorted-Array-lower-Bound-ca91f2d67ca94db6b499d8d10bcdf30c">Search Insert Position(Sorted Array) lower Bound.</a></figure><p id="cd412a3c-bb3d-4cc0-b787-504712443df1" class="">
+</p><p id="77585fa9-5e06-4eb7-9b43-7c19751b021c" class="">
+</p><p id="62650550-95bd-4632-a06b-c7af42adf0f7" class=""> </p><p id="c7395284-d259-4d7b-a209-a8700e6d053c" class="">
+</p></div></article></body></html>
